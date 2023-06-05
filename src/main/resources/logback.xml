@@ -1,0 +1,29 @@
+<configuration>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%yellow(%d{HH:mm:ss.SSS}) %highlight(%level) %green([%thread]) %cyan(%logger{50}) - %msg%n</pattern>
+    </encoder>
+    <RollingFile name="debugLog" class="ch.qos.logback.core.rolling.RollingFileAppender" fileName="logs/app-debug.log"
+                 filePattern="logs/app-debug-%d{yyyy-MM-dd}-%i.log">
+      <PatternLayout>
+        <Pattern>${LOG_PATTERN}</Pattern>
+      </PatternLayout>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="10MB" />
+        <TimeBasedTriggeringPolicy/>
+      </Policies>
+      <DefaultRolloverStrategy max="10"/>
+    </RollingFile>
+  </appender>
+
+  <logger name="org.topicquests" level="debug"/>
+  <logger name="io.netty" level="warn"/>
+  <logger name="io.vertx" level="info"/>
+  <logger name="io.vertx" level="error"/>
+  <root level="INFO">
+    <appender-ref ref="STDOUT"/>
+
+  </root>
+
+</configuration>

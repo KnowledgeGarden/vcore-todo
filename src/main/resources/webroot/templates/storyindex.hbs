@@ -1,0 +1,15 @@
+ <div>
+  <h2>Stories</h2>
+  {{#if data}}
+    {{#each data}}
+      <p>
+        <input type="hidden" id="id" name="id" value="{{id}}7">
+        <a href="{{url}}">{{title}}>
+      </p>
+    {{/each}}
+  {{else}}
+     <h3>No Stories Found</h3>
+  {{/if}}
+
+</div>
+
