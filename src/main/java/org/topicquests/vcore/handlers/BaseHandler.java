@@ -1,26 +1,35 @@
+/*
+ *
+ * Copyright (C) 2023, TopicQuests Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ *
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.topicquests.vcore.handlers;
 
-import io.vertx.core.Vertx;
-import io.vertx.ext.web.common.template.TemplateEngine;
-import io.vertx.ext.web.templ.handlebars.HandlebarsTemplateEngine;
 import io.vertx.sqlclient.SqlClient;
 
 /**
  * Database Handlers can extend this class for convenience
  * @author jackpark
- * @license Apache2
  */
 public class BaseHandler {
     protected final SqlClient db;
-    protected final HandlebarsTemplateEngine engine;
     private final String INDEX_PATH = "templates/index.hbs";
     /**
-     *
      * @param db
-     * @param vertx here in case it's needed for template engines
      */
-    public BaseHandler(final SqlClient db, Vertx vertx) {
-        engine = HandlebarsTemplateEngine.create(vertx);
+    public BaseHandler(final SqlClient db) {
         this.db = db;
     }
 }

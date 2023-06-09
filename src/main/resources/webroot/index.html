@@ -1,5 +1,52 @@
-<html>
+<script src="/js/vue.global.js"></script>
+<script src="/js/axios.min.js"></script>
+<!DOCTYPE html>
+<div id="app">
+    <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo Items</title>
+</head>
 <body>
-<h1>Hello World</h1>
+    <h1<a href ="/">VCORE-ToDo</a></h1>
+    <h2>ToDo Items</h2>
+    <div v-if="items === null">
+        <h3>No Items Found</h3>
+    </div>
+    <div v-else-if="items !== null">
+      <div v-for="item in items">
+
+        <p>
+          <input type="hidden" id="id" name="id" value="{{id}}7">
+          <a href="{{story.url}}">{{story.title}}</a><br/>
+          <a href="/comments/?storyid={{story.id}}">Comments</a>
+        </p>
+      </div>
+    </div>
+
 </body>
+
+
 </html>
+</div>
+<script lang="vue">
+  var app = new Vue({
+
+    el: '#app',
+    data: {
+      items: null,
+      limit: 5,
+      offset: 0
+    },
+    mounted () {
+      this.fetchItems()
+    },
+    methods: {
+      fetchItems: function() {
+        axios.get('/api/items')
+           .then(response => (this.items = response.data))
+      }
+    }
+  })
+  Console.log("APP",app)
+</script>

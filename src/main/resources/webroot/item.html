@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<div id="app">
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <title>ITEM</title>
+  </head>
+  <body>
+    <h1<a href ="/">VCORE-ToDo</a></h1>
+
+    <h2>Item</h2>
+    <script src="/js/vue.global.js"></script>
+    <script src="/js/axios.min.js"></script>
+  </body>
+  </html>
+</div>
+<script lang="vue">
+  var app = new Vue({
+    el: '#app',
+    data: {
+      items: null,
+      limit: 5,
+      offset: 0
+    },
+    mounted () {
+      this.fetchItem()
+    },
+    methods: {
+      fetchItems: function() {
+        axios.get('/api/item/39')
+           .then(response => (this.items = response.data))
+      }
+    }
+  })
+  Console.log("APP",app);
+
+</script>

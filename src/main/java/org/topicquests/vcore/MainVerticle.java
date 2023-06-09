@@ -7,6 +7,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import io.vertx.sqlclient.SqlClient;
 import org.slf4j.Logger;
@@ -35,18 +36,30 @@ public class MainVerticle extends AbstractVerticle {
         startServer(startPromise);
     }
 
+
     private void startServer(final Promise<Void> startPromise) {
         int port = config.getServerPort();
-        final Router restApi = Router.router(vertx);
-        restApi.route()
+        final Router router = Router.router(vertx);
+        router.route()
                 .handler(BodyHandler.create())
                 .failureHandler(handleFailure());
-        // simple test which fires webroot/index.html to test
-        //restApi.route("/*").handler(StaticHandler.create());
-        // fire up our routes
-        ToDoVerticle.attach(restApi, db, vertx);
+        router.route().handler(CorsHandler.create("*")
+                .allowedMethod(io.vertx.core.http.HttpMethod.GET)
+                .allowedMethod(io.vertx.core.http.HttpMethod.POST)
+                .allowedMethod(io.vertx.core.http.HttpMethod.OPTIONS)
+                .allowedHeader("Access-Control-Request-Method")
+                .allowedHeader("Access-Control-Allow-Credentials")
+                .allowedHeader("Access-Control-Allow-Origin")
+                .allowedHeader("Access-Control-Allow-Headers")
+                .allowedHeader("Content-Type"));
+        router.route().handler(BodyHandler.create());
+        // app will make ajax calls to here
+        ToDoVerticle.attach(router, db, vertx);
+        // boot the javascript client
+        router.route().handler(StaticHandler.create("app"));
+        router.get().handler(routingContext -> routingContext.response().sendFile("app/dist/index.html"));
         vertx.createHttpServer()
-                .requestHandler(restApi)
+                .requestHandler(router)
                 .exceptionHandler(error -> LOG.error("HTTP Server error: ", error))
                 .listen(port, http -> {
                     if (http.succeeded()) {
