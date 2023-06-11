@@ -85,11 +85,11 @@
 </template>
 
 <script>
-import axios from 'axios'
+/*import axios from 'axios'
 const rpc = axios.create({
     baseURL: 'http://localhost:8080', 
     proxy: false  
-})
+})*/
 export default {
     data() {
         return {
@@ -111,7 +111,7 @@ export default {
     methods: {
         async getTodos() {
             try {
-                const response = await rpc.get("/todos");
+                const response = await this.$axios.get("/todos");
                 this.ToDos = response.data;
                 console.log('gettodos',response.data);
             } catch (error) {
@@ -128,7 +128,7 @@ export default {
                 try {
                     this.newTodo.todo = this.todo;
                     console.log('todo', this.newTodo);
-                    const response = await rpc.post("/todos", this.newTodo);
+                    const response = await this.$axios.post("/todos", this.newTodo);
                     this.responseData = response.data;
                 } catch (error) {
                     this.errors.push(error);
@@ -142,7 +142,7 @@ export default {
         async delete_todo(index) {
             console.log('delete');
             try {
-                const response = await rpc.post("/todos/delete", index);
+                const response = await this.$axios.post("/todos/delete", index);
                 this.responseData = response.data;
             } catch (error) {
                 this.errors.push(error);
@@ -152,7 +152,7 @@ export default {
         async done_todo(todo) {
             console.log('put');
             try {
-                const response = await rpc.post("/todos/update", { "id":todo.id, "done": !todo.done });
+                const response = await this.$axios.post("/todos/update", { "id":todo.id, "done": !todo.done });
                 this.responseData = response.data;
                 console.log('postresponse',response.data);
             } catch (error) {
